@@ -25,7 +25,7 @@ const NavBar = () => {
   return (
     <div className="navbar">
       <Link to="/">
-        <h1 className="logo">QuickBite</h1>
+        <h1 className="logo">Foodies</h1>
       </Link>
       <ul className="navbar-menu">
         <li

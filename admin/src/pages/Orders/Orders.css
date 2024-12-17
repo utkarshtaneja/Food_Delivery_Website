@@ -29,37 +29,20 @@
   margin-bottom: 10px;
 }
 
-.order-item select {
-  background: tomato;
-  border: 1px solid tomato;
-  width: max(10vw, 120px);
-  padding: 10px;
-  outline: none;
+.processing {
+  background-color: #987fee;
 }
 
-.order-hr {
-  margin-top: 20px;
-  margin-bottom: 20px;
+.out-for-delivery {
+  background-color: #c8d427;
 }
 
-.order-item .processing {
-  background: #987fee;
-  border: 1px solid #987fee;
+.delivered {
+  background-color: rgb(192, 242, 199);
 }
 
-.order-item .out {
-  background: #c8d427;
-  border: 1px solid rgb(201, 206, 54);
-}
-
-.order-item .delivered {
-  background: rgb(192, 242, 199);
-  border: 1px solid rgb(54, 206, 77);
-}
-
-.order-item .cancelled {
-  background: rgb(255, 198, 188);
-  border: 1px solid rgb(255, 198, 188);
+.cancelled {
+  background-color: rgb(255, 198, 188);
 }
 
 .order-items-table {
@@ -80,19 +63,35 @@
   font-weight: bold;
 }
 
-.time-bold{
-    font-weight: 500;
-    font-size: 24px;
+.time-bold {
+  font-weight: 500;
+  font-size: 24px;
 }
 
-.details{
-    font-weight: 500;
-    font-size: 20px;
+.details {
+  font-weight: 500;
+  font-size: 20px;
 }
 
-.amount-color{
-    color: rgb(252, 87, 58);
-    font-weight: 700;
+.amount-color {
+  color: rgb(252, 87, 58);
+  font-weight: 700;
+}
+
+.pro{
+  background-color: #987fee;
+}
+
+.out{
+  background-color: yellow;
+}
+
+.del{
+  background-color: greenyellow;
+}
+
+.can{
+  background-color: tomato;
 }
 
 @media (max-width: 1000px) {
@@ -100,11 +99,6 @@
     font-size: 12px;
     grid-template-columns: 0.5fr 2fr 1fr;
     padding: 15px 8px;
-  }
-
-  .order-item select {
-    padding: 5px;
-    font-size: 12px;
   }
 
   .order-item .fa-box {

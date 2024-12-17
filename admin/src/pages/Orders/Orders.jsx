@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./Orders.css";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -11,9 +11,12 @@ const Orders = ({ url }) => {
     try {
       const response = await axios.get(`${url}/api/order/list`);
       if (response.data.success) {
-        setOrders(response.data.data);
-        const initialStatus = response.data.data.reduce((acc, order, index) => {
-          acc[index] =
+        const sortedOrders = response.data.data.sort(
+          (a, b) => new Date(b.date) - new Date(a.date) // Sort by date descending
+        );
+        setOrders(sortedOrders);
+        const initialStatus = sortedOrders.reduce((acc, order) => {
+          acc[order._id] =
             localStorage.getItem(`orderStatus-${order._id}`) ||
             order.status ||
             "Food Processing";
@@ -32,7 +35,7 @@ const Orders = ({ url }) => {
     fetchAllOrders();
   }, []);
 
-  const handleStatusChange = async (e, index, orderId) => {
+  const handleStatusChange = async (e, orderId) => {
     const status = e.target.value;
     try {
       const response = await axios.post(`${url}/api/order/status`, {
@@ -42,10 +45,11 @@ const Orders = ({ url }) => {
 
       if (response.data.success) {
         setOrderStatus((prevState) => {
-          const newState = { ...prevState, [index]: status };
+          const newState = { ...prevState, [orderId]: status };
           localStorage.setItem(`orderStatus-${orderId}`, status);
           return newState;
         });
+        toast.success("Order status updated");
       } else {
         toast.error("Error updating status");
       }
@@ -85,19 +89,6 @@ const Orders = ({ url }) => {
 
   const groupedOrders = groupOrdersByDate(orders);
 
-  const getOrderStatusBackground = (status) => {
-    switch (status) {
-      case "Out for delivery":
-        return "yellow";
-      case "Delivered":
-        return "lightgreen";
-      case "Cancelled":
-        return "lightcoral";
-      default:
-        return "white";
-    }
-  };
-
   return (
     <div className="order add">
       <h3>Order Page</h3>
@@ -109,15 +100,14 @@ const Orders = ({ url }) => {
               <h3>{date}</h3>
               {groupedOrders[date].map((order, orderIndex) => {
                 const { formattedTime } = formatDateTime(order.date);
+                const status = orderStatus[order._id] || "Food Processing";
                 return (
                   <div
-                    className={`order-item ${orderStatus[orderIndex]}`}
-                    key={orderIndex}
-                    style={{
-                      backgroundColor: getOrderStatusBackground(
-                        orderStatus[orderIndex]
-                      ),
-                    }}
+                    className={`order-item ${status.toLowerCase().replace(
+                      /\s/g,
+                      "-"
+                    )}`}
+                    key={order._id}
                   >
                     <i className="fa-solid fa-box"></i>
                     <div>
@@ -149,36 +139,20 @@ const Orders = ({ url }) => {
 
                       <p className="order-item-phone">{order.address.phone}</p>
                     </div>
-                    <p className="time-bold">{formattedTime}</p> 
+                    <p className="time-bold">Ordered at: {formattedTime}</p>
                     <p className="details">Items: {order.items.length}</p>
-                    <p className="details">Amount : <span className="amount-color">{order.amount}</span></p>
+                    <p className="details">
+                      Amount :{" "}
+                      <span className="amount-color">{order.amount}</span>
+                    </p>
                     <select
-                      value={orderStatus[orderIndex] || "Food Processing"}
-                      onChange={(e) =>
-                        handleStatusChange(e, orderIndex, order._id)
-                      }
-                      className={
-                        orderStatus[orderIndex] === "Out for delivery"
-                          ? "out"
-                          : orderStatus[orderIndex] === "Delivered"
-                          ? "delivered"
-                          : orderStatus[orderIndex] === "Cancelled"
-                          ? "cancelled"
-                          : "processing"
-                      }
+                      value={status}
+                      onChange={(e) => handleStatusChange(e, order._id)}
                     >
-                      <option value="Food Processing" className="processing">
-                        Food Processing
-                      </option>
-                      <option value="Out for delivery" className="out">
-                        Out for delivery
-                      </option>
-                      <option value="Delivered" className="delivered">
-                        Delivered
-                      </option>
-                      <option value="Cancelled" className="cancelled">
-                        Cancelled
-                      </option>
+                      <option className="pro" value="Food Processing">Food Processing</option>
+                      <option className="out" value="Out for delivery">Out for delivery</option>
+                      <option className="del" value="Delivered">Delivered</option>
+                      <option className="can" value="Cancelled">Cancelled</option>
                     </select>
                   </div>
                 );

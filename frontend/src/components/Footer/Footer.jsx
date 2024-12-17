@@ -9,7 +9,7 @@ const Footer = () => {
       <div className="footer-content">
 
         <div className="footer-content-left">
-          <h1 className='logo'>QuickBite</h1>
+          <h1 className='logo'>Foodies</h1>
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente, hic dignissimos amet fuga nostrum consequuntur saepe atque at totam quod.</p>
           <div className="footer-social-icons">
             <Link to='https://www.linkedin.com/in/utkarshtaneja/'><i className="fa-brands fa-linkedin"></i></Link>
@@ -38,7 +38,7 @@ const Footer = () => {
 
       </div>
       <hr />
-      <p className="footer-copyright">Copyright 2024 © QuickBite.com  - All Right Reserved.</p>
+      <p className="footer-copyright">Copyright 2024 © Foodies.com  - All Right Reserved.</p>
     </div>
   )
 }
